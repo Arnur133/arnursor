@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мое Портфолио | Arnur.Ai</title>
+    <style>
+        /* --- CSS VARIABLES & THEME --- */
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-color: #333;
+            --accent-color: #2563eb;
+            --secondary-text: #64748b;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --text-color: #f1f5f9;
+            --accent-color: #38bdf8;
+            --secondary-text: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- GLOBAL STYLES --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--accent-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* --- SECTIONS (GLASSMORPHISM CARDS) --- */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- PROFILE INFO STYLES --- */
+        .profile-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.1rem;
+        }
+        .profile-item:last-child { border-bottom: none; }
+        .profile-label {
+            color: var(--secondary-text);
+            font-weight: 500;
+        }
+        .profile-value {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        /* --- SKILLS & STATS --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+        .stat-number { font-size: 1.5rem; font-weight: bold; margin-bottom: 5px; }
+
+        /* --- GAME SECTION (Tic-Tac-Toe) --- */
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .cell {
+            width: 80px;
+            height: 80px;
+            background: rgba(128, 128, 128, 0.1);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .cell:hover { background: rgba(128, 128, 128, 0.2); }
+        .game-status { text-align: center; margin-bottom: 15px; font-weight: bold; }
+        
+        .reset-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Новые стили для кнопок сложности */
+        .difficulty-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .diff-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .diff-btn:hover {
+            background: rgba(128, 128, 128, 0.1);
+        }
+        .diff-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            color: var(--secondary-text);
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">Arnur.Ai v1.2</div>
+        <button class="theme-toggle" id="themeBtn">🌙 Тёмная тема</button>
+    </header>
+
+    <section class="card hero">
+        <h1>Привет, я <span id="name-placeholder">Арнур</span></h1>
+        <p class="typing-text">Я изучаю <span id="typing-effect" class="typing-cursor"></span></p>
+    </section>
+
+    <section class="card">
+        <h2>📂 Личное Досье</h2>
+        <ul class="profile-list">
+            <li class="profile-item">
+                <span class="profile-label">Возраст:</span>
+                <span class="profile-value">16 лет</span> 
+            </li>
+            <li class="profile-item">
+                <span class="profile-label">Город:</span>
+                <span class="profile-value">Алматы,Казахстан</span>
+            </li>
+            <li class="profile-item">
+                <span class="profile-label">Место учебы:</span>
+                <span class="profile-value">РФМШ</span>
+            </li>
+            <li class="profile-item">
+                <span class="profile-label">Класс:</span>
+                <span class="profile-value">10 "Е"</span>
+            </li>
+            <li class="profile-item">
+                <span class="profile-label">Любимые предметы:</span>
+                <span class="profile-value">Информатика,Алгебра</span>
+            </li>
+            <li class="profile-item">
+                <span class="profile-label">Хобби:</span>
+                <span class="profile-value">Программирование, Футбол</span>
+            </li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>⚡ Мои Навыки</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" style="color: #ef4444;">HTML/CSS</div>
+                <div>Знаю отлично</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" style="color: #eab308;">Python</div>
+                <div>Изучаю</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" style="color: #22c55e;">English</div>
+                <div>Level B2</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>🎮 Перемена: Крестики-нолики</h2>
+        <p style="text-align: center; color: var(--secondary-text); margin-bottom: 15px;">Выберите сложность и победите ИИ</p>
+        
+        <div class="difficulty-controls">
+            <button id="btnEasy" class="diff-btn active" onclick="setDifficulty('easy')">Легкий</button>
+            <button id="btnHard" class="diff-btn" onclick="setDifficulty('hard')">Сложный</button>
+        </div>
+
+        <div class="game-status" id="gameStatus">Ход игрока (X)</div>
+        <div class="game-board" id="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <button class="reset-btn" onclick="resetGame()">Заново</button>
+    </section>
+
+    <footer>
+        <p>© 2024 Мой Личный Сайт.</p>
+    </footer>
+</div>
+
+<script>
+    // --- 1. THEME SWITCHER LOGIC ---
+    const themeBtn = document.getElementById('themeBtn');
+    const body = document.body;
+
+    if (localStorage.getItem('theme') === 'dark') {
+        body.setAttribute('data-theme', 'dark');
+        themeBtn.innerText = '☀️ Светлая тема';
+    }
+
+    themeBtn.addEventListener('click', () => {
+        if (body.hasAttribute('data-theme')) {
+            body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            themeBtn.innerText = '🌙 Тёмная тема';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            themeBtn.innerText = '☀️ Светлая тема';
+        }
+    });
+
+    // --- 2. TYPING EFFECT ---
+    const textToType = ["программирование.", "дизайн.", "науку."];
+    let textIndex = 0;
+    let charIndex = 0;
+    const typeSpeed = 100;
+    const eraseSpeed = 50;
+    const delayBetween = 2000;
+    const typeTarget = document.getElementById('typing-effect');
+
+    function type() {
+        if (charIndex < textToType[textIndex].length) {
+            typeTarget.textContent += textToType[textIndex].charAt(charIndex);
+            charIndex++;
+            setTimeout(type, typeSpeed);
+        } else {
+            setTimeout(erase, delayBetween);
+        }
+    }
+
+    function erase() {
+        if (charIndex > 0) {
+            typeTarget.textContent = textToType[textIndex].substring(0, charIndex - 1);
+            charIndex--;
+            setTimeout(erase, eraseSpeed);
+        } else {
+            textIndex = (textIndex + 1) % textToType.length;
+            setTimeout(type, 500);
+        }
+    }
+    document.addEventListener("DOMContentLoaded", type);
+
+
+    // --- 3. GAME LOGIC ---
+    let boardState = Array(9).fill(null);
+    let isGameActive = true;
+    let currentDifficulty = 'easy'; // По умолчанию легкий
+
+    const statusDisplay = document.getElementById('gameStatus');
+    const cells = document.querySelectorAll('.cell');
+    const btnEasy = document.getElementById('btnEasy');
+    const btnHard = document.getElementById('btnHard');
+
+    // Функция выбора сложности
+    function setDifficulty(level) {
+        currentDifficulty = level;
+        
+        // Обновляем визуальный вид кнопок
+        if (level === 'easy') {
+            btnEasy.classList.add('active');
+            btnHard.classList.remove('active');
+        } else {
+            btnHard.classList.add('active');
+            btnEasy.classList.remove('active');
+        }
+        
+        // Сбрасываем игру при смене сложности
+        resetGame();
+    }
+
+    cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+
+    function handleCellClick(e) {
+        const index = e.target.getAttribute('data-index');
+        if (boardState[index] || !isGameActive) return;
+
+        makeMove(index, 'X');
+        
+        if (checkWin('X', boardState)) { endGame('Ты победил!'); return; }
+        if (checkDraw(boardState)) { endGame('Ничья!'); return; }
+
+        statusDisplay.innerText = "Компьютер думает...";
+        // Небольшая задержка для реалистичности
+        setTimeout(() => { if(isGameActive) aiMove(); }, 500);
+    }
+
+    function aiMove() {
+        let moveIndex;
+
+        if (currentDifficulty === 'easy') {
+            // ЛЕГКИЙ УРОВЕНЬ: Случайный ход
+            let available = boardState.map((val, idx) => val === null ? idx : null).filter(val => val !== null);
+            if (available.length > 0) {
+                moveIndex = available[Math.floor(Math.random() * available.length)];
+            }
+        } else {
+            // СЛОЖНЫЙ УРОВЕНЬ: Minimax (непобедимый)
+            moveIndex = getBestMove(boardState);
+        }
+
+        if (moveIndex !== undefined && moveIndex !== null) {
+            makeMove(moveIndex, 'O');
+            if (checkWin('O', boardState)) { endGame('Компьютер выиграл :('); }
+            else if (checkDraw(boardState)) { endGame('Ничья!'); }
+            else { statusDisplay.innerText = "Твой ход (X)"; }
+        }
+    }
+
+    function makeMove(index, player) {
+        boardState[index] = player;
+        cells[index].innerText = player;
+        cells[index].style.color = player === 'X' ? 'var(--accent-color)' : '#ef4444';
+    }
+
+    // Проверка победы (принимает состояние доски для Minimax)
+    function checkWin(player, board) {
+        const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        return wins.some(c => c.every(i => board[i] === player));
+    }
+
+    function checkDraw(board) { return board.every(c => c !== null); }
+
+    function endGame(msg) { statusDisplay.innerText = msg; isGameActive = false; }
+
+    function resetGame() {
+        boardState.fill(null);
+        cells.forEach(c => c.innerText = '');
+        isGameActive = true;
+        statusDisplay.innerText = "Ход игрока (X)";
+    }
+
+    // --- ЛОГИКА MINIMAX ДЛЯ СЛОЖНОГО УРОВНЯ ---
+    function getBestMove(board) {
+        let bestScore = -Infinity;
+        let move;
+        
+        for (let i = 0; i < 9; i++) {
+            if (board[i] === null) {
+                board[i] = 'O'; // Пробуем ход за ИИ
+                let score = minimax(board, 0, false);
+                board[i] = null; // Отменяем ход
+                if (score > bestScore) {
+                    bestScore = score;
+                    move = i;
+                }
+            }
+        }
+        return move;
+    }
+
+    function minimax(board, depth, isMaximizing) {
+        // Базовые случаи (терминальные состояния)
+        if (checkWin('O', board)) return 10 - depth; // ИИ выиграл (чем быстрее, тем лучше)
+        if (checkWin('X', board)) return depth - 10; // Игрок выиграл
+        if (checkDraw(board)) return 0; // Ничья
+
+        if (isMaximizing) {
+            let bestScore = -Infinity;
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === null) {
+                    board[i] = 'O';
+                    let score = minimax(board, depth + 1, false);
+                    board[i] = null;
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+            return bestScore;
+        } else {
+            let bestScore = Infinity;
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === null) {
+                    board[i] = 'X';
+                    let score = minimax(board, depth + 1, true);
+                    board[i] = null;
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
+    }
+</script>
+
+</body>
+</html>
